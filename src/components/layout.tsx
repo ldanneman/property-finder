@@ -27,13 +27,7 @@ const Layout: FunctionComponent<IProps> = ({ main }) => {
               <Link href="/houses/add">
                 <a>Add House</a>
               </Link>
-              <button
-                onClick={() => {
-                  logout;
-                }}
-              >
-                Logout
-              </button>
+              <button onClick={logout}>Logout</button>
             </>
           ) : (
             <Link href="/auth">

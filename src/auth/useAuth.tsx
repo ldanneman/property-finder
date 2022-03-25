@@ -6,9 +6,9 @@ import {
   FunctionComponent,
 } from 'react';
 import { useRouter } from 'next/router';
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import { getAuth } from 'firebase/auth';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+// import { getAuth } from 'firebase/compat/auth';
 import initFirebase from './initFirebase';
 import { removeTokenCookie, setTokenCookie } from './tokenCookies';
 
@@ -31,7 +31,8 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
   const router = useRouter();
 
   const logout = () => {
-    getAuth()
+    firebase
+      .auth()
       .signOut()
       .then(() => {
         router.push('/');
@@ -42,20 +43,24 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
   };
 
   useEffect(() => {
-    const cancelAuthListener = getAuth().onIdTokenChanged(async (user) => {
-      if (user) {
-        const token = await user.getIdToken();
-        setTokenCookie(token);
-        setUser(user);
-      } else {
-        removeTokenCookie();
-        setUser(null);
-      }
-    });
+    const cancelAuthListener = firebase
+      .auth()
+      .onIdTokenChanged(async (user) => {
+        if (user) {
+          const token = await user.getIdToken();
+          setTokenCookie(token);
+          setUser(user);
+        } else {
+          removeTokenCookie();
+          setUser(null);
+        }
+      });
+
     return () => {
       cancelAuthListener();
     };
   }, []);
+
   return (
     <AuthContext.Provider value={{ user, logout, authenticated: !!user }}>
       {children}
