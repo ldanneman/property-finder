@@ -1,5 +1,32 @@
-import Layout from "../src/components/layout";
+import Layout from '../src/components/layout';
+// import HouseList from "src/components/houseList";
+// import { useLastData } from "src/utils/useLastData";
+// import { useLocalState } from "src/utils/useLocalState";
+// import { HousesQuery, HousesQueryVariables } from "src/generated/HousesQuery";
+// import { useQuery, gql } from "@apollo/client";
+// import { useDebounce } from "use-debounce";
+import Map from 'src/components/map';
+import ReactMap from 'src/components/ReactMap';
+import RM from 'src/components/RM';
 
 export default function Home() {
-  return <Layout main={<div>Home</div>}></Layout>;
+  return (
+    <Layout
+      main={
+        <div className="flex">
+          <div
+            className="w-1/2 pb-4"
+            style={{ maxHeight: 'calc(100vh - 64px)', overflowY: 'scroll' }}
+          >
+            House List
+          </div>
+          <div className="w-1/2">
+            {/* <ReactMap /> */}
+            <Map />
+            {/* <RM /> */}
+          </div>
+        </div>
+      }
+    />
+  );
 }
