@@ -6,8 +6,6 @@ import Layout from '../src/components/layout';
 // import { useQuery, gql } from "@apollo/client";
 // import { useDebounce } from "use-debounce";
 import Map from 'src/components/map';
-import ReactMap from 'src/components/ReactMap';
-import RM from 'src/components/RM';
 
 export default function Home() {
   return (
@@ -16,14 +14,16 @@ export default function Home() {
         <div className="flex">
           <div
             className="w-1/2 pb-4"
-            style={{ maxHeight: 'calc(100vh - 64px)', overflowY: 'scroll' }}
+            style={{
+              maxHeight: 'calc(100vh - 64px)',
+              overflowY: 'scroll',
+              scrollbarWidth: 'none',
+            }}
           >
             House List
           </div>
           <div className="w-1/2">
-            {/* <ReactMap /> */}
             <Map />
-            {/* <RM /> */}
           </div>
         </div>
       }

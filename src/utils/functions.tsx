@@ -1,6 +1,12 @@
 export const removeLogo = () => {
-  const logo = document.querySelector(
-    '.mapboxgl-ctrl-attrib-inner, .mapbox-improve-map'
-  );
-  logo?.remove();
+  const classLogos = [
+    '.mapboxgl-ctrl-attrib-inner',
+    '.mapbox-improve-map',
+    '.mapboxgl-ctrl-logo',
+    '.mapboxgl-compact',
+    '.mapboxgl-ctrl-bottom-right',
+  ];
+  classLogos.forEach((el) => {
+    document.querySelector(el)?.remove();
+  });
 };

@@ -73,8 +73,9 @@
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
-      "yarn run eslint",
-      "yarn run prettier --write"
+       "yarn run prettier --write",
+      "yarn run eslint"
+     
     ]
   }
 }
