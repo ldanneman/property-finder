@@ -10,7 +10,7 @@
     "codegen:watch": "yarn codegen --watch",
     "db:init": "yarn prisma init",
     "db:generate": "yarn prisma generate",
-    "db:migrate:new": "yarn prisma migrate save --experimental",
+    "db:migrate:new": "yarn prisma migrate dev",
     "db:migrate:up": "yarn prisma migrate up --experimental",
     "db:migrate:down": "yarn prisma migrate down --experimental",
     "prepare": "husky install"
@@ -68,6 +68,7 @@
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-preset-env": "^7.3.3",
     "prettier": "^2.5.1",
+    "prisma": "^3.11.1",
     "tailwindcss": "^3.0.22",
     "typescript": "4.5.5"
   },
