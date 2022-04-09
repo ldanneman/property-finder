@@ -1,11 +1,12 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import { useForm } from 'react-hook-form';
 import Image from 'next/image';
-// import { useMutation, gql } from '@apollo/client';
+import { useMutation, gql } from '@apollo/client';
 // import { Router, useRouter } from 'next/router';
 import Link from 'next/link';
 // import { Image } from 'cloudinary-react';
 import SearchBox from './searchBox';
+import { CreateSignatureMutation } from 'src/generated/CreateSignatureMutation';
 // import {
 //   CreateHouseMutation,
 //   CreateHouseMutationVariables,
@@ -15,6 +16,37 @@ import SearchBox from './searchBox';
 //   UpdateHouseMutationVariables,
 // } from 'src/generated/UpdateHouseMutation';
 // import { CreateSignatureMutation } from 'src/generated/CreateSignatureMutation';
+
+const SIGNATURE_MUTATION = gql`
+  mutation CreateSignatureMutation {
+    createImageSignature {
+      signature
+      timestamp
+    }
+  }
+`;
+
+type UploadImageResponse = {
+  secure_url: string;
+};
+async function uploadImage(
+  image: File,
+  signature: string,
+  timestamp: number
+): Promise<UploadImageResponse> {
+  const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`;
+  const formData = new FormData();
+  formData.append('file', image);
+  formData.append('signature', signature);
+  formData.append('timestamp', timestamp.toString());
+  formData.append('api_key', process.env.NEXT_PUBLIC_CLOUDINARY_KEY ?? '');
+
+  const response = await fetch(url, {
+    method: 'post',
+    body: formData,
+  });
+  return response.json();
+}
 
 type Props = {
   address: string;
@@ -34,6 +66,8 @@ export default function HouseForm({}: Props) {
     formState: { errors },
   } = useForm<Props>({ defaultValues: {} });
   const address = watch('address');
+  const [createSignnature] =
+    useMutation<CreateSignatureMutation>(SIGNATURE_MUTATION);
 
   useEffect(() => {
     register('address', { required: 'Please enter your address' });
@@ -41,7 +75,14 @@ export default function HouseForm({}: Props) {
     register('latitude', { required: true, min: -180, max: 180 });
   }, [register]);
 
-  const handleCreate = async (data: Props) => {};
+  const handleCreate = async (data: Props) => {
+    const { data: signatureData } = await createSignnature();
+    if (signatureData) {
+      const { signature, timestamp } = signatureData.createImageSignature;
+      const imageData = await uploadImage(data.image[0], signature, timestamp);
+      // const imageUrl = imageData?.secure_url;
+    }
+  };
 
   const onSubmit = (data: Props) => {
     setSubmitting(true);
